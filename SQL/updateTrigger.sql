@@ -1,0 +1,23 @@
+CREATE OR REPLACE trigger update_students_trigger
+BEFORE
+UPDATE ON students
+FOR EACH ROW
+
+DECLARE
+    PASSWORD_DIGIT_ERROR EXCEPTION;
+    PASSWORD_BLANK_ERROR EXCEPTION;
+BEGIN
+
+    IF length(:new.s_pwd) < 4 then
+        RAISE PASSWORD_DIGIT_ERROR;
+    ELSIF :new.s_pwd like '% %' then
+        RAISE PASSWORD_BLANK_ERROR;
+    end if;
+
+    EXCEPTION
+    WHEN PASSWORD_DIGIT_ERROR then
+        RAISE_APPLICATION_ERROR(-20002, '암호자릿수 부족');
+    WHEN PASSWORD_BLANK_ERROR then
+        RAISE_APPLICATION_ERROR(-20003, '암호 공백');
+END;
+/
