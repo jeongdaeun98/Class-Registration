@@ -8,7 +8,12 @@
 <%@ include file="top.jsp" %>
 
 <%	session_id = (String)session.getAttribute("userID");
-	if (session_id == null) response.sendRedirect("login.jsp");
+	if (session_id == null) { %>
+	<script>
+		alert("로그인한 후 사용하세요.");
+		location.href="login.jsp";
+	</script>
+<%	} 
 
     String day[]={"일","월","화","수","목","금","토"};
     String type[]={"교양", "전공"};
@@ -28,6 +33,7 @@
         cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
         cstmt.execute();
         int nSemester = cstmt.getInt(1);
+        cstmt.close();
 %>
 <br>
 <center><%= nYear %>학년도 <%= nSemester %>학기 수강신청</center>
@@ -81,6 +87,7 @@
                 	}
                 }
                 remain = t_personnel - registered;
+				stmt2.close();
 %>
     <tr>
         <td align="center"><%=c_id%></td>
