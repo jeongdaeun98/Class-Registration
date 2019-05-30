@@ -13,7 +13,7 @@
 		alert("로그인한 후 사용하세요.");
 		location.href="login.jsp";
 	</script>
-<%	} 
+<%	}  
 
     String day[]={"일","월","화","수","목","금","토"};
     String type[]={"교양", "전공"};
@@ -36,9 +36,32 @@
         cstmt.close();
 %>
 <br>
-<center><%= nYear %>학년도 <%= nSemester %>학기 수강신청</center>
+<table width="75%" align="center" border="0">
+	<tr><td align="center"><font size="5px"><b><%= nYear %>학년도 <%= nSemester %>학기 수강신청</b></font></td></tr>
+	<tr><td align="right">
+		<br>
+		<form name="search" method ="post">
+			강의 검색 
+            <select name="keyField", onchange="onChangeSelect()">
+                <option value="course">과목</option>
+                <option value="prof">담당교수</option>
+            </select>
+            <input type="text" placeholder="과목명 혹은 과목 번호를 입력하세요" name="keyWord" style="width:25%" />
+			<input type="button" value="검색"/>  
+		</form>
+	</td></tr>
+</table>
+<script language="javascript"'>
+	function onChangeSelect() { //select option 값이 바뀔 때마다 input text의 placeholder를 바꾸고 싶어서 시도하였으나 모르겠습니다...
+		if (document.getElementByName('keyField').value == 'course')) {
+			document.getElementByName('keyWord').placeholder = '과목명 혹은 과목 번호를 입력하세요.';
+		}
+		else {
+			document.getElementByName('keyWord').placeholder = '담당교수 이름을 입력하세요.';
+		}
+	}
+</script>
 <table width="75%" align="center" border>
-    <br>
     <tr>
         <th>과목번호</th>
         <th>과목명</th>
