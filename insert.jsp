@@ -54,7 +54,7 @@
     </tr>
 <%
         Statement stmt = conn.createStatement();
-        String selectAttributes = "select c.c_id, c.c_name, c.c_unit, c.c_type, t.t_day1, t.t_time1, t.t_day2, t.t_time2, p.p_name, c.c_credit, t.t_personnel "
+        String selectAttributes = "select c.c_id, c.c_name, c.c_unit, c.c_type, t.t_day1, t.t_time1, t.t_day2, t.t_time2, t.t_location, p.p_name, c.c_credit, t.t_personnel "
         		+ "from course c, teach t, professor p "
         		+ "where c.c_id = t.c_id AND c.c_unit = t.c_unit AND t.p_id = p.p_id AND t.t_year = '" + nYear + "' AND t.t_semester = '" + nSemester + "'";
         ResultSet rs = stmt.executeQuery(selectAttributes);
@@ -71,6 +71,7 @@
                 int t_time2 = rs.getInt("t_time2");
                 if (!rs.wasNull())
                 	full_day += ", " + t_day2 + " " + t_time2 + "교시";
+               	full_day += " (" + rs.getString("t_location") +")";
                 String p_name = rs.getString("p_name");
                 int c_credit = rs.getInt("c_credit");
                 int t_personnel = rs.getInt("t_personnel");
