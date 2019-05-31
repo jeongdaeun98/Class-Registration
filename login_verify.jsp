@@ -33,7 +33,7 @@
         if(rs.next()) {
             String getID = rs.getString("s_id");
             if(getID.equals(userID)){
-                session.setAttribute("user", getID);
+                session.setAttribute("userID", getID);
                 response.sendRedirect("main.jsp");
             }
         }
