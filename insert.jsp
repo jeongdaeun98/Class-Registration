@@ -13,7 +13,8 @@
 		alert("로그인한 후 사용하세요.");
 		location.href="login.jsp";
 	</script>
-<%	}  
+<%	}
+	session.setMaxInactiveInterval(20*60);
 
     String day[]={"일","월","화","수","목","금","토"};
     String type[]={"교양", "전공"};
