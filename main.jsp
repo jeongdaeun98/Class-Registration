@@ -6,6 +6,7 @@
 <body>
 <%
 String session_identity = (String)session.getAttribute("identity");
+
 if(session_identity.equals("student")){
 %>
 	<%@include file="top.jsp"%>
