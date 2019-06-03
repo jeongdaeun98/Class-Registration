@@ -14,7 +14,14 @@
 <%
     String userID = request.getParameter("userID");
     String userPassword = request.getParameter("userPassword");
-
+    String identity=null;
+    if(userID.length()==5){
+    	identity="professor";
+    }
+    if(userID.length()==7){
+    	identity="student";
+    }
+	
     Connection myConn;
     Statement stmt;
     ResultSet rs;
@@ -24,16 +31,22 @@
 
         myConn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",
             "dbp", "123");
-        String mySQL= "select s_id from students where s_id='" + userID + "' and s_pwd='" + userPassword + "'";
+        String mySQL=null;
+        
+        if(identity.equals("student")){
+        	mySQL= "select s_id as id from students where s_id='" + userID + "' and s_pwd='" + userPassword + "'";
+        }
+        else{
+        	mySQL= "select p_id as id from professor where p_id='" + userID + "' and p_pwd='" + userPassword + "'";
+        }
+        
         stmt = myConn.createStatement();
-        System.out.println(mySQL);
-
         rs = stmt.executeQuery(mySQL);
-
         if(rs.next()) {
-            String getID = rs.getString("s_id");
+            String getID = rs.getString("id");
             if(getID.equals(userID)){
                 session.setAttribute("userID", getID);
+                session.setAttribute("identity", identity);
                 response.sendRedirect("main.jsp");
             }
         }
