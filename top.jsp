@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java"  pageEncoding="UTF-8"%>
-<% String session_id = (String) session.getAttribute("user");
+<% String session_id = (String) session.getAttribute("userID");
     String log;
     if (session_id == null)
         log = "<a href=login.jsp>로그인</a>";
