@@ -6,12 +6,12 @@ create or replace procedure insertTeach
     vqueryNum1 number;
     vqueryNum2 number;
     same_location_datetime_error exception;
+    same_datetime_error exception;
     begin
     select count(*)
     into vqueryNum1
     from teach
     where t_location = tLocation and t_day1 = tDay1 and t_time1 = tTime1;
-
     if (vqueryNum1 > 0) then
         raise same_location_datetime_error;
     end if;
