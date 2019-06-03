@@ -109,11 +109,11 @@
 	Statement stmt2 = myConn2.createStatement();
 	for(int i=1;i<10;i++){
 		time = i;
-		String getTimetable = "select c.c_name as name, t.t_day1 as day from course c, enroll e, teach t where e.s_id= '" +s_id+ "' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+" and t.t_time1=" +time+ " UNION select c.c_name as name, t.t_day2 from course c, enroll e, teach t where e.s_id='"+s_id+"' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+ " and t.t_time2=" +time+ " order by day";
+		String getTimetable = "select c.c_name as name, t.t_day1 as day, t.t_location as location from course c, enroll e, teach t where e.s_id= '" +s_id+ "' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+" and t.t_time1=" +time+ " UNION select c.c_name as name, t.t_day2, t.t_location from course c, enroll e, teach t where e.s_id='"+s_id+"' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+ " and t.t_time2=" +time+ " order by day";
 		rs2 = stmt2.executeQuery(getTimetable);
 		if(rs2!=null){
 			while(rs2.next()){
-				Arr[time-1][rs2.getInt("day")-1]=rs2.getString("name");
+				Arr[time-1][rs2.getInt("day")-1]=rs2.getString("name")+" ("+rs2.getString("location")+")";
 			}
 		}
 	}
