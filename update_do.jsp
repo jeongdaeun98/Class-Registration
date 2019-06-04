@@ -36,28 +36,21 @@
 		s_email = myResultSet.getString("s_email");
 	}
 %>
-
-<table width="75%" align="center" border>
 <br>
-<tr><th bgcolor="#FFFF99">학번</th><td align="center"><%= s_id %></td></tr>
-<tr><th bgcolor="#FFFF99">이름</th><td align="center"><%= s_name %></td></tr>
-<tr><th bgcolor="#FFFF99">전공</th><td align="center"><%= s_major %></td></tr>
-<tr><th bgcolor="#FFFF99">휴대폰 번호</th><td align="center"><%= s_phone %></td></tr>
-<tr><th bgcolor="#FFFF99">이메일 주소</th><td align="center"><%= s_email %></td></tr>
-</table>
-<br>
-<div align="center"><button onclick="update_do()">수정</button></div>
-	<script>
-		function update_do() {
-			var response = prompt("정보를 변경하기 위해서는 비밀번호를 한 번 더 입력하여야 합니다", "비밀번호");
-			var s_pwd = "<%=s_pwd%>";
-			if (response == s_pwd) {
-				location.href = "update_do.jsp";
-			}
-			else {
-				alert("비밀번호가 틀렸습니다.");	
-			}
-		}
-	</script>
+<div align="center">
+	<form name="update" action="update_verify.jsp" method ="post">
+		<table width="75%" align="center" border>
+			<tr><th bgcolor="#FFFF99">학번</th><td align="center"><%= s_id %></td></tr>
+			<tr><th bgcolor="#FFFF99">이름</th><td align="center"><%= s_name %></td></tr>
+			<tr><th bgcolor="#FFFF99">전공</th><td align="center"><%= s_major %></td></tr>
+			<tr><th bgcolor="#FFFF99">휴대폰 번호</th><td align="center"><input name="phone" type="text" value="<%= s_phone %>" /></td></tr>
+			<tr><th bgcolor="#FFFF99">이메일 주소</th><td align="center"><input name="email" type="text" value="<%= s_email %>" /></td></tr>
+			<tr><th bgcolor="#FFFF99">비밀번호</th><td align="center">새 비밀번호&nbsp;<input name="pwd" type="password" value="<%= s_pwd %>" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;비밀번호 확인&nbsp;<input name="pwd_verify" type="password" value="<%= s_pwd %>" /></td></tr>
+		</table>
+		<br>
+		<input type="submit" value="확인">
+		<input type="button" value="취소" onClick="location.href='update.jsp'">
+	</form>
+</div>
 </body>
 </html>

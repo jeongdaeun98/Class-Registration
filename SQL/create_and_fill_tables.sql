@@ -9,11 +9,10 @@ CREATE TABLE STUDENTS(
 	s_pwd VARCHAR(30) NOT NULL,
 	s_major VARCHAR(30) NOT NULL,
 	s_name VARCHAR(10) NOT NULL,
-	s_phone VARCHAR(30) NOT NULL,
-	s_email VARCHAR(30) NOT NULL,
+	s_phone VARCHAR(30) NOT NULL UNIQUE,
+	s_email VARCHAR(30) NOT NULL UNIQUE,
 	CONSTRAINT pk_students PRIMARY KEY(s_id),
-	CONSTRAINT ck_students CHECK(LENGTH(s_id) = 7),
-	CONSTRAINT uk_students UNIQUE(s_phone, s_email)
+	CONSTRAINT ck_students CHECK(LENGTH(s_id) = 7)
 );
 INSERT INTO STUDENTS VALUES ('1400000', 'abcde', '컴퓨터과학과', '눈송이', '010-1234-5678', 'noon@sookmyung.ac.kr');
 INSERT INTO STUDENTS VALUES ('1400001', 'abezcvsd', '컴퓨터과학과', '현은주', '010-1748-3111', 'fvnkgsf9l@sookmyung.ac.kr');
@@ -56,8 +55,8 @@ CREATE TABLE PROFESSOR (
   p_pwd VARCHAR(30) NOT NULL,
   p_name VARCHAR(30) NOT NULL,
   p_major VARCHAR(30) NOT NULL,
-  p_phone VARCHAR(30) NOT NULL,
-  p_email VARCHAR(30) NOT NULL,
+  p_phone VARCHAR(30) NOT NULL UNIQUE,
+  p_email VARCHAR(30) NOT NULL UNIQUE,
   CONSTRAINT pk_professor PRIMARY KEY(p_id),
   CONSTRAINT ck_professor CHECK(LENGTH(p_id) = 5),
   CONSTRAINT uk_professor UNIQUE(p_phone, p_email)
