@@ -42,9 +42,10 @@ else{%>
     String user = "dbp";
     String pw = "123";
     String driver = "oracle.jdbc.driver.OracleDriver";
+    Connection conn = null;
     try {
         Class.forName(driver);
-        Connection conn = DriverManager.getConnection(url, user, pw);
+        conn = DriverManager.getConnection(url, user, pw);
         CallableStatement cstmt = conn.prepareCall("{? = call Date2EnrollYear(SYSDATE)}");
         cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
         cstmt.execute();
@@ -85,7 +86,7 @@ else{%>
             while(rs.next()) {
                 String c_id = rs.getString("c_id");
                 String c_name = rs.getString("c_name");
-                String c_unit = rs.getString("c_unit");
+               	String c_unit = rs.getString("c_unit");
                 String c_type = type[rs.getInt("c_type")];
                 String t_day1 = day[rs.getInt("t_day1")];
                 int t_time1 = rs.getInt("t_time1");

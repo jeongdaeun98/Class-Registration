@@ -1,35 +1,68 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     <%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 </head>
 <body>
-<form method="post" action="insert_professor.jsp"></form>
  <%
  String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
  String user = "dbp";
  String passwd = "123";
  String driver = "oracle.jdbc.driver.OracleDriver";
+ String id = null;
  try {
-	 String c_id = request.getParameter("c_id");
+	 request.setCharacterEncoding("UTF-8");
 	 String p_id = (String)session.getAttribute("userID");
 	 String c_name = request.getParameter("c_name");
 	 String c_unit = request.getParameter("c_unit");
 	 int c_type = Integer.parseInt(request.getParameter("c_type"));
 	 int t_day1 = Integer.parseInt(request.getParameter("t_day1"));
-	 int t_day2 = Integer.parseInt(request.getParameter("t_day2"));
+	 int t_day2 = -1;
+	 if(request.getParameter("t_day2")!="")
+	 	t_day2 = Integer.parseInt(request.getParameter("t_day2"));
 	 int t_time1 = Integer.parseInt(request.getParameter("t_time1"));
-	 int t_time2 = Integer.parseInt(request.getParameter("t_time2"));
-	 int t_perssonnel = Integer.parseInt(request.getParameter("t_perssonnel"));
+	 int t_time2 = -1;
+	 if(request.getParameter("t_time2") != "")
+	 	t_time2 = Integer.parseInt(request.getParameter("t_time2"));
+	 int t_personnel = Integer.parseInt(request.getParameter("t_personnel"));
 	 String t_location = request.getParameter("t_location");
 	 int c_credit = Integer.parseInt(request.getParameter("c_credit"));
-	 String c_major = request.getParameter("c_major");
-	 if(t_day1 == t_day2 && t_time1 == t_time2) %><script>alert("½Ã°£°ú ³¯Â¥°¡ µ¿ÀÏÇÕ´Ï´Ù.");location.href="insert_professor.jsp";</script> <%
+	 String c_major = null;
+	 if(t_day2 != -1 && t_day1 == t_day2 && t_time1 == t_time2) %><script>alert("ì‹œê°„ê³¼ ë‚ ì§œê°€ ë™ì¼í•©ë‹ˆë‹¤.");location.href="insert_professor.jsp";</script> <%
+	 if(t_day2 != -1 &&t_day1 > t_day2) {
+		 int temp;
+		 temp = t_day1;
+		 t_day1 = t_day2;
+		 t_day2 = temp;
+		 temp = t_time1;
+		 t_time1 = t_time2;
+		 t_time2 = temp;
+	 }
 		Class.forName(driver);
 		Connection conn = DriverManager.getConnection(dburl, user, passwd);
+		Statement stmt = conn.createStatement();
+		
+		String query ="select c_id from course";
+		String querytwo = "select p_major from professor where p_id = '" +p_id+"'";
+		ResultSet rs = stmt.executeQuery(query);
+		ResultSet majorset = stmt.executeQuery(querytwo);
+		id = Integer.toString(2100);
+		id = id + Integer.toString((int)((double)Math.floor(Math.random() * 9999) + 1));
+		if(majorset.next()){
+			c_major = majorset.getString("p_major");
+		}
+		while(rs.next()){
+			String queryId = rs.getString("c_id");
+			while(queryId == id) {
+				id = Integer.toString(2100);
+				id = id + Integer.toString((int)((double)Math.floor(Math.random() * 9999) + 1));
+			}
+		}
+		stmt.close();
+		System.out.println(id);
+		String c_id = id;
 		CallableStatement cstmt = conn.prepareCall("{? = call Date2EnrollYear(SYSDATE)}");
     	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
     	cstmt.execute();
@@ -47,6 +80,7 @@
     	cstmt.setString(6,c_major);
     	cstmt.execute();
     cstmt = conn.prepareCall("{call insertTeach(?,?,?,?,?,?,?,?,?,?,?)}");
+    System.out.println(p_id+c_id+c_unit+Integer.toString(nYear)+Integer.toString(nSemester)+Integer.toString(t_day1)+Integer.toString(t_time1)+Integer.toString(t_day2)+Integer.toString(t_time2)+Integer.toString(t_personnel)+t_location);
     cstmt.setString(1,p_id);
 	cstmt.setString(2,c_id);
 	cstmt.setString(3,c_unit);
@@ -54,9 +88,15 @@
 	cstmt.setInt(5,nSemester);
 	cstmt.setInt(6,t_day1);
 	cstmt.setInt(7,t_time1);
-	cstmt.setInt(8,t_day2);
-	cstmt.setInt(9,t_time2);
-	cstmt.setInt(10,t_perssonnel);
+	if(t_day2 == -1){
+		cstmt.setNull(8,Types.INTEGER);
+		cstmt.setNull(9,Types.INTEGER);
+	}
+	else{
+		cstmt.setInt(8,t_day2);
+		cstmt.setInt(9,t_time2);
+	}
+	cstmt.setInt(10,t_personnel);
 	cstmt.setString(11,t_location);
 	cstmt.execute();
     cstmt.close();
@@ -66,23 +106,28 @@
 	 if(e.getErrorCode() == 20011){
 		 System.out.println( e.getMessage());
 		 %>
-		 <script>alert("ÇöÀç °³¼³µÈ °­ÀÇ,ºĞ¹İÀÌ¹Ç·Î È®ÀÎ¹Ù¶ø´Ï´Ù.");location.href="insert_professor.jsp";</script><%
+		 <script>alert("í˜„ì¬ ê°œì„¤ëœ ê°•ì˜,ë¶„ë°˜ì´ë¯€ë¡œ í™•ì¸ë°”ëë‹ˆë‹¤.");location.href="insert_professor.jsp";</script><%
 	 }
 	 else if(e.getErrorCode() == 20012){
 		 System.out.println( e.getMessage());
 		 %>
-		 <script>alert("ÀÌ¹Ì °°Àº Àå¼Ò¿¡ °³¼³µÈ °­ÀÇ°¡ ÀÖ½À´Ï´Ù.");location.href="insert_professor.jsp";</script><%
+		 <script>alert("ì˜¬ë°”ë¥´ì§€ ì•Šì€ ë¶„ë°˜ì´ë¯€ë¡œ í™•ì¸ë°”ëë‹ˆë‹¤.");location.href="insert_professor.jsp";</script><%
+	 }
+	 else if(e.getErrorCode() == 20013){
+		 System.out.println( e.getMessage());
+		 %>
+		 <script>alert("ì´ë¯¸ ê°™ì€ ì¥ì†Œì— ê°œì„¤ëœ ê°•ì˜ê°€ ìˆìŠµë‹ˆë‹¤.");location.href="insert_professor.jsp";</script><%
 	 }
 	 else{
 		 System.out.println( e.getMessage());
 		 %>
-		 <script>alert("¿Ã¹Ù¸¥ Çü½ÄÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");location.href="insert_professor.jsp";</script><%
+		 <script>alert("ì˜¬ë°”ë¥¸ í˜•ì‹ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");location.href="insert_professor.jsp";</script><%
 	 }
  }
- catch(Exception e){
-	 System.out.println( e.getMessage());
-	 %><script>alert("´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");location.href="insert_professor.jsp";</script><%
- }
     %>
+    <script>
+    window.opener.location.reload();
+	window.close();
+	</script>
 </body>
 </html>

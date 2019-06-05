@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>강의 추가</title>
 <style>
 ul{
@@ -14,13 +15,6 @@ label{
 }
 </style>
 
-<script type="text/javascript">
-function refresh(id){
-	window.opener.location.reload();
-	window.close();
-}
-
-</script>
 </head>
 <body>
 <%
@@ -31,44 +25,19 @@ String session_id = (String)session.getAttribute("userID");
 		location.href="login.jsp";
 	</script>
 <%	}
-	session.setMaxInactiveInterval(20*60);
-    
-    String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-    String user = "dbp";
-    String pw = "123";
-    String driver = "oracle.jdbc.driver.OracleDriver";
-    String id = "0";
-    try {
-        Class.forName(driver);
-        Connection conn = DriverManager.getConnection(url, user, pw);
-		Statement stmt = conn.createStatement();	
-		String query ="select c_id from course";
-		ResultSet rs = stmt.executeQuery(query);
-		id = Double.toString(21000000 + Math.floor(Math.random() * 9999) + 1);
-
-		while(rs.next()){
-			String queryId = rs.getString("c_id");
-			while(queryId == id) id = Double.toString(21000000 + Math.floor(Math.random() * 9999) + 1);
-		}
-		stmt.close();
-		conn.close();
-    }
-    catch(SQLException e){
-    	System.err.println("SQLException : " + e.getMessage());
-    }
-				
+	session.setMaxInactiveInterval(20*60);	
 %>
 <ul>
 	<li>
 	
 	<form action ="insert_verify_professor.jsp" method="post">
 	<label for="c_name">과목명</label>
-	<input type="text" id ="c_name"/>
+	<input type="text" name ="c_name"/>
 	</li>
 		<br>
 	<li>
 	<label for="c_unit">분반 예>001 </label>
-	<input type="text" id="c_unit"/>
+	<input type="text" name="c_unit"/>
 	</li>
 		<br>
 	<li>
@@ -116,7 +85,7 @@ String session_id = (String)session.getAttribute("userID");
 	<%} %>
 	<li>
 	<lable for="t_location">강의 장소</lable>
-	<input type="text" id ="t_location"/>
+	<input type="text" name ="t_location"/>
 	
 	</li>
 	<br>
