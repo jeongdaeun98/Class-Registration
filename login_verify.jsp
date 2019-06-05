@@ -18,7 +18,7 @@
     if(userID.length()==5){
     	identity="professor";
     }
-    if(userID.length()==7){
+    else{
     	identity="student";
     }
 	
@@ -36,7 +36,7 @@
         if(identity.equals("student")){
         	mySQL= "select s_id as id from students where s_id='" + userID + "' and s_pwd='" + userPassword + "'";
         }
-        else{
+        else if(identity.equals("professor")){
         	mySQL= "select p_id as id from professor where p_id='" + userID + "' and p_pwd='" + userPassword + "'";
         }
         
@@ -51,9 +51,12 @@
             }
         }
 
-        else {
-            response.sendRedirect("login.jsp");
-        }
+        else {%>
+        	<script type = "text/javascript"> 
+        	alert("로그인에 실패하였습니다.");
+       		location.href="login.jsp" 
+        	</script>
+        <%}
 
         rs.close();
         stmt.close();
