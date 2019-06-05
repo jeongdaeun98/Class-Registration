@@ -10,10 +10,24 @@
     </script>
 </head>
 <body>
-<%@ include file="top_professor.jsp" %>
-
-<%	session_id = (String)session.getAttribute("userID");
-	if (session_id == null) { %>
+<%
+String session_identity = (String)session.getAttribute("identity");
+if(session_identity!=null){
+	if(session_identity.equals("student")){
+%>
+		<%@include file="top.jsp"%>
+	<%}
+	else{
+%>
+		<%@include file="top_professor.jsp"%>
+	<%}
+}
+else{%>
+	<%@include file="top.jsp"%>
+<%}
+%>
+<%	String sessionID = (String)session.getAttribute("userID");
+	if (sessionID == null) { %>
 	<script>
 		alert("로그인한 후 사용하세요.");
 		location.href="login.jsp";
@@ -65,7 +79,7 @@
         		"t.t_time2 as t_time2, t.t_location as t_location, p.p_name as p_name, c.c_credit as c_credit, t.t_personnel as t_personnel "
         		+ "from course c, teach t, professor p "
         		+ "where c.c_id = t.c_id AND c.c_unit = t.c_unit AND t.p_id = p.p_id AND t.t_year = '" + nYear + "' AND t.t_semester = '" + nSemester + "' and t.p_id = '"+
-        				session_id+"'";
+        				sessionID+"'";
         ResultSet rs = stmt.executeQuery(selectAttributes);
         if(rs != null) {
             while(rs.next()) {

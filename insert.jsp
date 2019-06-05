@@ -5,8 +5,7 @@
     <title>수강신청 입력</title>
 </head>
 <body>
-<%@ include file="top.jsp" %>
-
+<%@include file="top.jsp"%>
 <%	session_id = (String)session.getAttribute("userID");
 	if (session_id == null) { %>
 	<script>

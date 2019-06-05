@@ -40,7 +40,22 @@
 </style>
 </head>
 <body>
-<%@ include file="top.jsp" %>
+<%
+String session_identity = (String)session.getAttribute("identity");
+if(session_identity!=null){
+	if(session_identity.equals("student")){
+%>
+		<%@include file="top.jsp"%>
+	<%}
+	else{
+%>
+		<%@include file="top_professor.jsp"%>
+	<%}
+}
+else{%>
+	<%@include file="top.jsp"%>
+<%}
+%>
 <%
 	String s_id = (String)session.getAttribute("userID");
 %>
@@ -107,6 +122,7 @@
 	int time=0;
 	String[][] Arr = new String[9][6];
 	Statement stmt2 = myConn2.createStatement();
+	
 	for(int i=1;i<10;i++){
 		time = i;
 		String getTimetable = "select c.c_name as name, t.t_day1 as day, t.t_location as location from course c, enroll e, teach t where e.s_id= '" +s_id+ "' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+" and t.t_time1=" +time+ " UNION select c.c_name as name, t.t_day2, t.t_location from course c, enroll e, teach t where e.s_id='"+s_id+"' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+ " and t.t_time2=" +time+ " order by day";
@@ -146,6 +162,7 @@
 	}
 	
 %>
+<div align="center">
 <table width="75%"; class="timetable"; align="center"; border= "1px solid #333333";>
 <thead>
     <tr>
@@ -177,5 +194,6 @@
   %>
 </tbody>
 </table>
+</div>
 </body>
 </html>

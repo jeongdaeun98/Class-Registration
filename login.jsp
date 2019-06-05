@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> <meta charset="UTF-8">수강신청 시스템 로그인</title>
+    <title><meta charset="UTF-8">수강신청 시스템 로그인</title>
 </head>
 <body>
 <table width="75%" align="center" bgcolor="#FFFF99" border>

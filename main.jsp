@@ -6,14 +6,18 @@
 <body>
 <%
 String session_identity = (String)session.getAttribute("identity");
-
-if(session_identity.equals("student")){
+if(session_identity!=null){
+	if(session_identity.equals("student")){
 %>
+		<%@include file="top.jsp"%>
+	<%}
+	else{
+%>
+		<%@include file="top_professor.jsp"%>
+	<%}
+}
+else{%>
 	<%@include file="top.jsp"%>
-<%}
-else{
-%>
-	<%@include file="top_professor.jsp"%>
 <%}
 %>
 <table width="75%" align="center" height="100%">
