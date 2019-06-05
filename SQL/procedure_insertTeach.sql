@@ -32,7 +32,7 @@ create or replace procedure insertTeach
 
     exception
     when same_location_datetime_error then
-    RAISE_APPLICATION_ERROR(-20012,'이미 동일한 시간에 동일한 장소 내 수업이 존재');
+    RAISE_APPLICATION_ERROR(-20013,'이미 동일한 시간에 동일한 장소 내 수업이 존재');
 end;
 /
         
