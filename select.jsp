@@ -126,7 +126,13 @@ else{%>
 	for(int i=1;i<10;i++){
 		time = i;
 		String getTimetable = "select c.c_name as name, t.t_day1 as day, t.t_location as location from course c, enroll e, teach t where e.s_id= '" +s_id+ "' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+" and t.t_time1=" +time+ " UNION select c.c_name as name, t.t_day2, t.t_location from course c, enroll e, teach t where e.s_id='"+s_id+"' and e.c_id=c.c_id and e.c_id = t.c_id and e.c_unit = t.c_unit and e.c_unit = c.c_unit and t.t_year="+year+" and t.t_semester="+semester+ " and t.t_time2=" +time+ " order by day";
-		rs2 = stmt2.executeQuery(getTimetable);
+		String getPtimetable="select c.c_name as name, t.t_day1 as day, t.t_location as location from course c, teach t where t.p_id= '" +s_id+ "' and t.c_id=c.c_id and c.c_unit = t.c_unit and t.t_year="+year+" and t.t_semester="+semester+" and t.t_time1=" +time+ " UNION select c.c_name as name, t.t_day2, t.t_location from course c, teach t where t.p_id='"+s_id+"' and t.c_id=c.c_id and c.c_unit = t.c_unit and t.t_year="+year+" and t.t_semester="+semester+ " and t.t_time2=" +time+ " order by day";
+		if(session_identity.equals("student")){
+			rs2 = stmt2.executeQuery(getTimetable);
+		}
+		else{
+			rs2 = stmt2.executeQuery(getPtimetable);
+		}
 		if(rs2!=null){
 			while(rs2.next()){
 				Arr[time-1][rs2.getInt("day")-1]=rs2.getString("name")+" ("+rs2.getString("location")+")";
